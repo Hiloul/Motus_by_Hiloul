@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOTUS</title>
-    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
-    <script src="motus.php"></script>
+    <title>Motus</title>
 </head>
 <body>
-    <h1>Mo-mo-motus</h1>
-    <form id="formMotus">
-        <input type="text" id="motSaisi" placeholder="Devinez le mot !"/>
-        <button type="submit">Valider</button>
+    <form id="userForm">
+        <label for="username">Nom d'utilisateur:</label><br>
+        <input type="text" id="username" name="username" required>
+        <input type="submit" value="Créer un compte">
+        <p id="errorMessage" style="color: red;"></p>
+        <p id="successMessage" style="color: green;"></p>
+
+
     </form>
-    <p id="reponse"></p>
-    <script src="script.js"></script>
+    <script src="src/js/script.js"></script>  
 </body>
 </html>
