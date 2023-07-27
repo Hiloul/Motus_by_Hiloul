@@ -40,4 +40,4 @@ $sql = "INSERT INTO users (username) VALUES (?)";
 $stmt= $pdo->prepare($sql);
 $stmt->execute([$username]);
 
-echo json_encode(['success' => 'Utilisateur enregistré avec succès.']);
+echo json_encode(['success' => 'Utilisateur créé avec succès.']);

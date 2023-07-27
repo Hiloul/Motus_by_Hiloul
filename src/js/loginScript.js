@@ -29,7 +29,7 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
           // Rediriger l'utilisateur vers la page de jeu après 2 secondes
           setTimeout(function () {
             window.location.href = "src/php/dashboard.php";
-          }, 2000);
+          }, 1000);
         }
       } catch (error) {
         console.error("Erreur lors du parsing du JSON:", error);

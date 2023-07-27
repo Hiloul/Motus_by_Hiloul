@@ -37,5 +37,5 @@ if ($count == 0) {
 // Stocker le nom d'utilisateur dans la session
 $_SESSION['username'] = $username;
 
-echo json_encode(['success' => 'Utilisateur connecté avec succès.']);
+echo json_encode(['success' => 'Connexion reussie !']);
 ?>

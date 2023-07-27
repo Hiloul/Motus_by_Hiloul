@@ -22,8 +22,8 @@ session_start();
     </h1>
     <div class="container">
         <h3>Mon tableau de bord: </h3>
-        <a href="src/php/motus.php">Commencer le jeu</a>
-        <a href="homeGame.html">Voir mes meilleurs scores</a>
+        <a href="src/php/motus.php">Commencer à jouer !</a>
+        <a href="homeGame.html">Mes meilleurs scores</a>
         <a href="logout.php">Déconnecter</a>
     </div>
 </body>

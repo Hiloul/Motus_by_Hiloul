@@ -27,8 +27,8 @@ document.getElementById("userForm").addEventListener("submit", function (e) {
           successMessageElement.textContent = response.success;
           // Rediriger l'utilisateur vers la page de jeu après 2 secondes
           setTimeout(function () {
-            window.location.href = "homeGame.html";
-          }, 2000);
+            window.location.href = "index.html";
+          }, 1500);
         }
       } catch (error) {
         console.error("Erreur lors du parsing du JSON:", error);
