@@ -1,4 +1,7 @@
 <?php
+// Démarrer la session
+session_start();
+
 // JSON
 header('Content-Type: application/json');
 
@@ -31,4 +34,8 @@ if ($count == 0) {
     exit();
 }
 
+// Stocker le nom d'utilisateur dans la session
+$_SESSION['username'] = $username;
+
 echo json_encode(['success' => 'Utilisateur connecté avec succès.']);
+?>

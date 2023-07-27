@@ -28,7 +28,7 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
           successMessageElement.textContent = response.success;
           // Rediriger l'utilisateur vers la page de jeu après 2 secondes
           setTimeout(function () {
-            window.location.href = "homeGame.html";
+            window.location.href = "src/php/dashboard.php";
           }, 2000);
         }
       } catch (error) {
