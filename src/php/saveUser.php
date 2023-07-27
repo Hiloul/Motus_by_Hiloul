@@ -41,4 +41,3 @@ $stmt= $pdo->prepare($sql);
 $stmt->execute([$username]);
 
 echo json_encode(['success' => 'Utilisateur enregistré avec succès.']);
-?>
