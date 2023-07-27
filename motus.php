@@ -1,18 +1,29 @@
 <?php
-// Connexion à la BDD SQL "motus"
-$host = 'localhost';
-$db   = 'motus';
-$user = 'root';
-$pass = 'root';
-$charset = 'utf8mb3';
+session_start();
+require 'Motus.php';
 
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-$opt = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES   => false,
-];
-$pdo = new PDO($dsn, $user, $pass, $opt);
+$pdo = new PDO('mysql:host=localhost;dbname=motus', 'root', 'root');
+
+$motus = new Motus($pdo);
+
+if (isset($_POST['motSaisi'])) {
+    echo $motus->deviner($_POST['motSaisi']);
+}
+
+// Connexion à la BDD SQL "motus"
+// $host = 'localhost';
+// $db   = 'motus';
+// $user = 'root';
+// $pass = 'root';
+// $charset = 'utf8mb3';
+
+// $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+// $opt = [
+//     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+//     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+//     PDO::ATTR_EMULATE_PREPARES   => false,
+// ];
+// $pdo = new PDO($dsn, $user, $pass, $opt);
 
 //Table WORDS à rajouter
 $sql = "CREATE TABLE words (
@@ -43,7 +54,7 @@ class Motus {
     public function deviner($mot) {
         if ($mot === $this->motMystere) {
             $this->score->incrementScore(strlen($this->motMystere));
-            return "Félicitations, vous avez trouvé ! Votre score est maintenant " . $this->score->getScore();
+            return "Félicitations, vous avez trouvé le mot! Votre score est maintenant " . $this->score->getScore();
         }
 
         $reponse = "";

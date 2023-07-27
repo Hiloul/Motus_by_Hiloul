@@ -6,7 +6,7 @@ $(document).ready(function(){
             type: 'post',
             data: {motSaisi: $('#motSaisi').val()},
             success: function(reponse) {
-                $('#reponse').html(reponse);
+                $('#reponse').text(reponse);
             }
         });
     });
