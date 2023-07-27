@@ -35,10 +35,8 @@ document.getElementById('userForm').addEventListener('submit', function(e) {
     xhr.onload = function() {
         if (this.status == 200) {
             var response = JSON.parse(this.responseText);
-
             var errorMessageElement = document.getElementById('errorMessage');
             var successMessageElement = document.getElementById('successMessage');
-
             if (response.error) {
                 // Afficher le message d'erreur
                 errorMessageElement.textContent = response.error;
@@ -49,7 +47,6 @@ document.getElementById('userForm').addEventListener('submit', function(e) {
                 errorMessageElement.textContent = '';
                 // Afficher le message de succès
                 successMessageElement.textContent = response.success;
-
                 // Rediriger l'utilisateur vers la page de jeu après 2 secondes
                 setTimeout(function() {
                     window.location.href = 'homeGame.html';
