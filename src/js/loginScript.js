@@ -1,13 +1,14 @@
-document.getElementById("userForm").addEventListener("submit", function (e) {
+// Login
+document.getElementById("loginForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
   var username = document.getElementById("username").value;
-  console.log(username);
+
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", "src/php/saveUser.php", true);
+  xhr.open("POST", "src/php/login.php", true);
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhr.send("username=" + encodeURIComponent(username));
-  console.log(xhr.readyState, xhr.status);
+
   xhr.onload = function () {
     if (this.status == 200) {
       try {
@@ -36,4 +37,6 @@ document.getElementById("userForm").addEventListener("submit", function (e) {
     }
   };
 });
+
+
 
