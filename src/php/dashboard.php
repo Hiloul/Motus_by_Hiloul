@@ -25,6 +25,7 @@ session_start();
         <a href="http://localhost/php/Motus_by_Hiloul/score.html">Mes scores</a>
         <a href="logout.php">Déconnecter</a>
     </div>
+    <footer>Motus2023&copy;ByHiloul</footer>
     <script src="src/js/scoreScript.js"></script>
 </body>
 </html>

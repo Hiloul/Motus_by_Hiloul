@@ -54,7 +54,7 @@ h1 {
 #userForm input[type=submit] {
   padding: 10px 20px;
   border: none;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   cursor: pointer;
   border-radius: 5px;
@@ -65,12 +65,56 @@ h1 {
 #userForm label {
   margin-bottom: 10px;
 }
-#userForm #errorMessage, #userForm #successMessage {
+#userForm #errorMessage,
+#userForm #successMessage {
   margin-top: 20px;
 }
 
 .redirectionLogin {
   text-align: center;
+}
+
+a {
+  text-decoration: none;
+  text-align: center;
+}
+a:hover {
+  color: red;
+}
+
+#loginForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px;
+  height: 50vh;
+  margin: 160px;
+}
+#loginForm input[type=text] {
+  margin-bottom: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 100%;
+  max-width: 300px;
+}
+#loginForm button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #4caf50;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+#loginForm button:hover {
+  background-color: #45a049;
+}
+#loginForm label {
+  margin-bottom: 10px;
+}
+#loginForm #errorMessage,
+#loginForm #successMessage {
+  margin-top: 20px;
 }
 
 a {
