@@ -55,12 +55,12 @@ h1 {
   input[type="submit"] {
     padding: 10px 20px;
     border: none;
-    background-color: #4caf50;
+    background-color: #0077be;
     color: white;
     cursor: pointer;
     border-radius: 5px;
     &:hover {
-      background-color: #45a049;
+      background-color: rgb(27, 97, 138);
     }
   }
   label {
@@ -78,7 +78,7 @@ a {
   text-decoration: none;
   text-align: center;
   &:hover {
-    color: red; // test
+    color: rgb(27, 97, 138); // test
   }
 }
 
@@ -100,12 +100,12 @@ a {
     button{
       padding: 10px 20px;
       border: none;
-      background-color: #4caf50;
+      background-color: #0077be;
       color: white;
       cursor: pointer;
       border-radius: 5px;
       &:hover {
-        background-color: #45a049;
+        background-color: rgb(27, 97, 138);
       }
     }
     label {
@@ -120,7 +120,7 @@ a {
     text-decoration: none;
     text-align: center;
     &:hover {
-      color: red; // test
+      color: rgb(27, 97, 138); // test
     }
   }
 
@@ -157,12 +157,12 @@ a {
     button{
       padding: 10px 20px;
       border: none;
-      background-color: #4caf50;
+      background-color: #0077be;
       color: white;
       cursor: pointer;
       border-radius: 5px;
       &:hover {
-        background-color: #45a049;
+        background-color: rgb(27, 97, 138);
       }
     }
     label {

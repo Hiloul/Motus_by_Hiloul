@@ -59,13 +59,13 @@ h1 {
 #userForm input[type=submit] {
   padding: 10px 20px;
   border: none;
-  background-color: #4caf50;
+  background-color: #0077be;
   color: white;
   cursor: pointer;
   border-radius: 5px;
 }
 #userForm input[type=submit]:hover {
-  background-color: #45a049;
+  background-color: rgb(27, 97, 138);
 }
 #userForm label {
   margin-bottom: 10px;
@@ -84,7 +84,7 @@ a {
   text-align: center;
 }
 a:hover {
-  color: red;
+  color: rgb(27, 97, 138);
 }
 
 #loginForm {
@@ -106,13 +106,13 @@ a:hover {
 #loginForm button {
   padding: 10px 20px;
   border: none;
-  background-color: #4caf50;
+  background-color: #0077be;
   color: white;
   cursor: pointer;
   border-radius: 5px;
 }
 #loginForm button:hover {
-  background-color: #45a049;
+  background-color: rgb(27, 97, 138);
 }
 #loginForm label {
   margin-bottom: 10px;
@@ -127,7 +127,7 @@ a {
   text-align: center;
 }
 a:hover {
-  color: red;
+  color: rgb(27, 97, 138);
 }
 
 #regenerate {
@@ -163,13 +163,13 @@ a:hover {
 #wordForm button {
   padding: 10px 20px;
   border: none;
-  background-color: #4caf50;
+  background-color: #0077be;
   color: white;
   cursor: pointer;
   border-radius: 5px;
 }
 #wordForm button:hover {
-  background-color: #45a049;
+  background-color: rgb(27, 97, 138);
 }
 #wordForm label {
   margin-bottom: 10px;
