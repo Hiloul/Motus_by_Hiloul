@@ -27,14 +27,21 @@ $pdo = new PDO($dsn, $user, $pass, $opt);
 
 // Récupérer tous les scores d'un utilisateur
 function getUserScores($pdo, $userId) {
-    $sql = "SELECT * FROM scores WHERE user_id = ? ORDER BY score DESC LIMIT 10"; // Get the top 10 scores
+    $sql = "SELECT score, game_date FROM scores WHERE user_id = ? ORDER BY score DESC LIMIT 10"; // Get the top 10 scores
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$userId]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-$scores = getUserScores($pdo, $userId);
-
-header('Content-Type: application/json');
-echo json_encode($scores);
+try {
+    $scores = getUserScores($pdo, $userId);
+    header('Content-Type: application/json');
+    echo json_encode($scores);
+} catch (PDOException $e) {
+    header('Content-Type: application/json');
+    echo json_encode(['error' => 'Une erreur est survenue lors de la récupération des scores.']);
+} finally {
+    // Fermer la connexion à la base de données
+    $pdo = null;
+}
 ?>
