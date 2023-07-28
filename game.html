@@ -2,7 +2,8 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Motus Game</title>
+    <title>Motus Jeu</title>
+    <link rel="stylesheet" href="public/css/style.css" />
     <style>
         .green { color: green; }
         .orange { color: orange; }
@@ -11,15 +12,15 @@
 </head>
 <body>
     <h1>Mo-Mo-Motus</h1>
-    <button id="regenerate">Changer de mot</button>
+    <a href="src/php/dashboard.php">Retour au tableau de bord</a>
     <form id="wordForm">
+        <button id="regenerate">Changer de mot</button>
         <input type="text" id="wordInput" placeholder="Entrez un mot" required>
         <button type="submit">Valider</button>
     </form>    
     <div id="wordDisplay"></div>
     <div id="errorMessage"></div>
     <div id="attemptsCounter"></div>
-    <a href="src/php/dashboard.php">Retour au tableau de bord</a>
     <footer>Motus2023&copy;ByHiloul</footer>
     <script src="src/js/motusScript.js"></script>
     <script src="src/js/scoreScript.js"></script>
