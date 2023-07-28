@@ -4,9 +4,51 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Motus Inscription</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="src/js/registerScript.js"></script>
+    <script>
+      $(document).ready(function () {
+        $.get(
+          "src/php/wallOfFame.php",
+          function (data) {
+            var scores = data.topScores;
+            for (var i = 0; i < scores.length; i++) {
+              var score = scores[i];
+              var row =
+                "<tr><td>" +
+                score.username +
+                "</td><td>" +
+                score.score +
+                "</td></tr>";
+              $("#scoreTable tbody").append(row);
+            }
+          },
+          "json"
+        );
+      });
+    </script>
+     <style>
+      .walloffame {
+        height: 50vh;
+      }
+    </style>
   </head>
   <body>
     <h1>Hello World</h1>
+    <div class="walloffame">
+      <h3>Tableau des meilleurs scores</h3>
+      <table id="scoreTable">
+        <thead>
+          <tr>
+            <th>Utilisateur</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Les scores ici -->
+        </tbody>
+      </table>
+    </div>
     <form id="userForm">
       <label for="username">Nom d'utilisateur:</label>
       <input type="text" id="username" name="username" required />
@@ -18,6 +60,5 @@
     <div class="redirectionLogin">
       <a href="login.html">Déjà inscrit(e)?</a>
     </div>
-    <script src="src/js/registerScript.js"></script>
   </body>
 </html>

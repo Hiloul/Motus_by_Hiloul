@@ -1,14 +1,9 @@
 <?php
+// Démarrer la session
 session_start();
 
-// Vérifie si l'utilisateur est connecté
-if (!isset($_SESSION['userId'])) {
-    header('Content-Type: application/json');
-    echo json_encode(['error' => 'Verifiez que vous êtes bien connecté(e).']);
-    exit();
-}
-
-$userId = $_SESSION['userId'];
+// JSON
+header('Content-Type: application/json');
 
 // Connexion BDD motus
 $host = 'localhost';
@@ -25,9 +20,23 @@ $opt = [
 ];
 $pdo = new PDO($dsn, $user, $pass, $opt);
 
+// Vérifie si l'utilisateur est connecté
+if (!isset($_SESSION['user_id'])) {
+    $response = ['error' => 'Verifiez que vous êtes bien connecté(e).'];
+    echo json_encode($response);
+    exit();
+}
+
+$userId = $_SESSION['user_id'];
+
+// Si un nom d'utilisateur est envoyé par la méthode POST, le stocker dans la session
+if (isset($_POST['username'])) {
+    $_SESSION['username'] = $_POST['username'];
+}
+
 // Récupérer tous les scores d'un utilisateur
 function getUserScores($pdo, $userId) {
-    $sql = "SELECT score, game_date FROM scores WHERE user_id = ? ORDER BY score DESC LIMIT 10"; // Get the top 10 scores
+    $sql = "SELECT score FROM scores WHERE user_id = ? ORDER BY score DESC LIMIT 10"; // top 10
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$userId]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -35,13 +44,14 @@ function getUserScores($pdo, $userId) {
 
 try {
     $scores = getUserScores($pdo, $userId);
-    header('Content-Type: application/json');
-    echo json_encode($scores);
+    $response = ['scores' => $scores];
 } catch (PDOException $e) {
-    header('Content-Type: application/json');
-    echo json_encode(['error' => 'Une erreur est survenue lors de la récupération des scores.']);
+    $response = ['error' => 'Une erreur est survenue lors de la récupération des scores.'];
 } finally {
     // Fermer la connexion à la base de données
     $pdo = null;
 }
+
+// Envoi de la réponse en JSON
+echo json_encode($response);
 ?>

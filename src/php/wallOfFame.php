@@ -1,8 +1,4 @@
 <?php
-// JSON
-header('Content-Type: application/json');
-
-$username = $_POST['username'];
 // Connexion BDD motus
 $host = 'localhost';
 $db   = 'motus';
@@ -18,15 +14,25 @@ $opt = [
 ];
 $pdo = new PDO($dsn, $user, $pass, $opt);
 
-// Afficher les scores de l'utilisateur connecté
-function getUserScores($pdo, $userId) {
-    // On affiche les 10 meilleurs scores de la BDD
-    $sql = "SELECT * FROM scores WHERE user_id = ? ORDER BY score DESC LIMIT 10";
+// Afficher les 10 meilleurs scores de tous les utilisateurs
+function getBestScores($pdo) {
+    $sql = "SELECT username, score FROM scores JOIN users ON scores.user_id = users.id ORDER BY score DESC LIMIT 10";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$userId]);
+    $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-$scores = getUserScores($pdo, $userId);
 
+try {
+    $scores = getBestScores($pdo);
+    $response = ['topScores' => $scores];
+} catch (PDOException $e) {
+    $response = ['error' => 'Une erreur est survenue lors de la récupération des scores.'];
+} finally {
+    // Fermer la connexion à la base de données
+    $pdo = null;
+}
+
+// Envoi de la réponse en JSON
 header('Content-Type: application/json');
-echo json_encode($scores);
+echo json_encode($response);
+?>
