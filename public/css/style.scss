@@ -1,0 +1,48 @@
+body {
+  height: 100vh;
+  background-image: url("/public/img/bg-principale.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+h1 {
+  text-align: center;
+}
+.walloffame {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px;
+  background: #f0f0f0;
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    th,
+    td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background: #e0e0e0;
+    }
+    tr:nth-child(even) {
+      background: #f5f5f5;
+    }
+  }
+}
+
+#userForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px;
+}
+
+a {
+  text-decoration: none;
+  text-align: center;
+  &:hover {
+    padding: 10px;
+  }
+}

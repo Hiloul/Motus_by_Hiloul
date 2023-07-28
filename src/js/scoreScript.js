@@ -1,45 +1,35 @@
-document.addEventListener("DOMContentLoaded", function() {
-    var scoreButton = document.getElementById("scoreButton");
+// Lorsque le formulaire est soumis...
+document.getElementById("wordForm").addEventListener("submit", function (e) {
+    e.preventDefault();
 
-    if(scoreButton) {
-        scoreButton.addEventListener("click", function() {
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", "src/php/score.php", true);
+    // Récupérer le mot proposé
+    var proposedWord = document.getElementById("wordInput").value;
 
-            xhr.onload = function() {
-                if (this.status == 200) {
-                    try {
-                        var response = JSON.parse(this.responseText);
-                    } catch(e) {
-                        alert('Erreur de parsing JSON: ' + e);
-                        return;
-                    }
+    // Créer une requête HTTP
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "src/php/motus.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
-                    var scoreList = document.getElementById("scoreList");
-                    scoreList.innerHTML = ''; // clear existing scores
-                    if (response.error) {
-                        var errorItem = document.createElement("li");
-                        errorItem.textContent = response.error;
-                        scoreList.appendChild(errorItem);
-                    } else if(Array.isArray(response)){
-                        for (var i = 0; i < response.length; i++) {
-                            var scoreItem = document.createElement("li");
-                            scoreItem.textContent = "Score: " + response[i].score;
-                            scoreList.appendChild(scoreItem);
-                        }
-                    } else {
-                        alert('Réponse du serveur non reconnue.');
-                    }
-                } else {
-                    alert('Une erreur est survenue lors de la requête au serveur. Code de statut : ' + this.status);
-                }
-            };
+    // Envoyer la requête
+    xhr.send("word=" + encodeURIComponent(proposedWord));
 
-            xhr.onerror = function() {
-                alert('Une erreur est survenue lors de la connexion au serveur.');
-            };
+    // Lorsque la requête se termine...
+    xhr.onload = function () {
+        if (this.status == 200) {
+            // Parse the response
+            var response = JSON.parse(this.responseText);
 
-            xhr.send();
-        });
-    }
+            // Vérifier si le mot a été deviné
+            if (response.isGuessed) {
+                // Afficher un message de réussite
+                alert("Bravo ! Vous avez deviné le mot.");
+            } else {
+                // Afficher un message d'échec
+                alert("Dommage ! Réessayez.");
+            }
+        } else {
+            // Gérer les erreurs de la requête
+            alert("Une erreur s'est produite lors de la soumission du mot.");
+        }
+    };
 });

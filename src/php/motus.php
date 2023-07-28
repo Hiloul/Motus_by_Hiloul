@@ -1,5 +1,7 @@
 <?php
 session_start();
+$_SESSION['user_id'] = $userId; // the user ID should be fetched from your user login or registration process
+$_SESSION['nb_tentatives'] = 0; // initialize attempts
 
 // Connexion BDD motus
 $host = 'localhost';
@@ -57,22 +59,45 @@ for ($i = 0; $i < strlen($proposedWord); $i++) {
     }
 }
 
+// Vérifier si les variables de session sont définies et valides
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['attempts'])) {
+    echo json_encode(["error" => "User ID or Attempts not set in session."]);
+    exit();
+}
+
+// Le score est basé sur le nombre de tentatives
+// Si $attempts vaut 0, évitez une division par zéro en attribuant un score de 0
+$attempts = $_SESSION['attempts'];
+$score = $attempts ? (1 / $attempts) * 100 : 0;
+
 // Insérer le mot dans la base de données s'il a été deviné
 if ($isGuessed) {
-    $sql = "INSERT INTO words (word) VALUES (?)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$wordToGuess]);
+    try {
+        // Vérifier si les variables de session sont définies et valides
+        if (!isset($_SESSION['user_id']) || !isset($_SESSION['attempts'])) {
+            throw new Exception("User ID ou Attempts non défini(e) en session.");
+        }
 
-    // Le score est basé sur le nombre de tentatives
-    // Si $attempts vaut 0, évitez une division par zéro en attribuant un score de 0
-    $score = $_SESSION['attempts'] ? (1 / $_SESSION['attempts']) * 100 : 0;
+        // Le score est basé sur le nombre de tentatives
+        // Si $attempts vaut 0, évitez une division par zéro en attribuant un score de 0
+        $attempts = $_SESSION['attempts'];
+        $score = $attempts ? (1 / $attempts) * 100 : 0;
 
-    $sql = "INSERT INTO scores (user_id, score) VALUES (?, ?)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$_SESSION['user_id'], $score]);
+        // Insérer le score et le mot deviné dans la table games
+        $sql = "INSERT INTO games (user_id, word, nb_tentatives, score) VALUES (?, ?, ?, ?)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$_SESSION['user_id'], $wordToGuess, $attempts, $score]);
 
-    // Réinitialisez le mot à deviner pour la prochaine requête
-    unset($_SESSION['wordToGuess']);
+        // Réinitialisez le mot à deviner pour la prochaine requête
+        unset($_SESSION['wordToGuess']);
+
+    } catch (PDOException $e) {
+        // Afficher le message d'erreur SQL
+        echo "Erreur : " . $e->getMessage();
+    } catch (Exception $e) {
+        // Afficher le message d'erreur
+        echo "Erreur : " . $e->getMessage();
+    }
 }
 
 // Incrémenter le compteur de tentatives si le mot n'a pas été deviné
@@ -87,6 +112,8 @@ if ($_SESSION['attempts'] >= 6) {
     echo json_encode($response);
     // Réinitialisation du compteur apres les 6 tentatives échouées
     $_SESSION['attempts'] = 0;
+    // Réinitialisez le mot à deviner pour la prochaine requête
+    unset($_SESSION['wordToGuess']);
     exit();
 }
 
