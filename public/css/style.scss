@@ -1,10 +1,11 @@
+*{box-sizing: border-box;}
 body {
-  height: 100vh;
-  background-image: url("/public/img/bg-principale.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
+    height: 100vh;
+    background-image: url("../img/bg-principale.png");
+    background-repeat: no-repeat;
+  }
+  
+  
 h1 {
   text-align: center;
 }
@@ -31,18 +32,66 @@ h1 {
     }
   }
 }
-
 #userForm {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 50px;
-}
-
-a {
-  text-decoration: none;
-  text-align: center;
-  &:hover {
-    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px;
+    input[type="text"] {
+      margin-bottom: 20px;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 100%;
+      max-width: 300px;
+    }
+    input[type="submit"] {
+      padding: 10px 20px;
+      border: none;
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+      &:hover {
+        background-color: #45a049;
+      }
+    }
+    label {
+      margin-bottom: 10px;
+    }
+    #errorMessage, #successMessage {
+      margin-top: 20px;
+    }
   }
-}
+  
+
+.redirectionLogin {
+    text-align: center;
+  }
+  a {
+    text-decoration: none;
+    text-align: center;
+    &:hover {
+      color: red; // test
+    }
+  }
+  
+  footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px; // Hauteur du footer
+    background-color: #333; // Couleur d'arrière-plan du footer
+    color: #fff; // Couleur du texte du footer
+    font-size: 14px; // Taille de la police du footer
+    
+    width: 100%; // Largeur du footer
+    bottom: 0; // Positionne le footer en bas de la page
+  
+    // Style pour le copyright
+    &::before {
+      content: "\00a9"; // Symbole de copyright
+      margin-right: 5px; // Espace entre le symbole de copyright et le texte
+    }
+  }
+  

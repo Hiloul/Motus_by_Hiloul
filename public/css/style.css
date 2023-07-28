@@ -1,8 +1,11 @@
+@charset "UTF-8";
+* {
+  box-sizing: border-box;
+}
+
 body {
   height: 100vh;
-  background-image: url("/public/img/bg-principale.png");
-  background-size: cover;
-  background-position: center;
+  background-image: url("../img/bg-principale.png");
   background-repeat: no-repeat;
 }
 
@@ -40,11 +43,56 @@ h1 {
   align-items: center;
   padding: 50px;
 }
+#userForm input[type=text] {
+  margin-bottom: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 100%;
+  max-width: 300px;
+}
+#userForm input[type=submit] {
+  padding: 10px 20px;
+  border: none;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+#userForm input[type=submit]:hover {
+  background-color: #45a049;
+}
+#userForm label {
+  margin-bottom: 10px;
+}
+#userForm #errorMessage, #userForm #successMessage {
+  margin-top: 20px;
+}
+
+.redirectionLogin {
+  text-align: center;
+}
 
 a {
   text-decoration: none;
   text-align: center;
 }
 a:hover {
-  padding: 10px;
+  color: red;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+  background-color: #333;
+  color: #fff;
+  font-size: 14px;
+  width: 100%;
+  bottom: 0;
+}
+footer::before {
+  content: "©";
+  margin-right: 5px;
 }/*# sourceMappingURL=style.css.map */
