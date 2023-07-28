@@ -56,7 +56,17 @@ if ($isGuessed) {
     $sql = "INSERT INTO words (word) VALUES (?)";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$wordToGuess]);
+
+    $attempts = 6;
+    // Le score est basé sur le nombre de tentatives
+    $score = (1 / $attempts) * 100;
+
+    $sql = "INSERT INTO scores (user_id, score) VALUES (?, ?)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$userId, $score]);
 }
+
+
 
 // Incrémenter le compteur de tentatives si le mot n'a pas été deviné
 if (!$isGuessed) {
