@@ -29,6 +29,12 @@ if (!isset($_SESSION['wordToGuess'])) {
 }
 
 // Le mot proposé par l'utilisateur
+if (!isset($_POST['word'])) {
+    header('Content-Type: application/json');
+    echo json_encode(['error' => 'No word provided']);
+    exit();
+}
+
 $proposedWord = $_POST['word'];
 
 // Préparation de la réponse
@@ -57,28 +63,29 @@ if ($isGuessed) {
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$wordToGuess]);
 
-    $attempts = 6;
     // Le score est basé sur le nombre de tentatives
-    $score = (1 / $attempts) * 100;
+    // Si $attempts vaut 0, évitez une division par zéro en attribuant un score de 0
+    $score = $_SESSION['attempts'] ? (1 / $_SESSION['attempts']) * 100 : 0;
 
     $sql = "INSERT INTO scores (user_id, score) VALUES (?, ?)";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$userId, $score]);
+    $stmt->execute([$_SESSION['user_id'], $score]);
+
+    // Réinitialisez le mot à deviner pour la prochaine requête
+    unset($_SESSION['wordToGuess']);
 }
-
-
 
 // Incrémenter le compteur de tentatives si le mot n'a pas été deviné
 if (!$isGuessed) {
     $_SESSION['attempts']++;
 }
 
-// // Vérifier si le nombre de tentatives a dépassé la limite après incrémentation
+// Vérifier si le nombre de tentatives a dépassé la limite après incrémentation
 if ($_SESSION['attempts'] >= 6) {
     $response = ['error' => 'Perdu ! Nombre de tentatives atteintes.', 'attempts' => $_SESSION['attempts']];
     header('Content-Type: application/json');
     echo json_encode($response);
-// Réinitialisation du compteur apres les 6 tentatives échouées
+    // Réinitialisation du compteur apres les 6 tentatives échouées
     $_SESSION['attempts'] = 0;
     exit();
 }
