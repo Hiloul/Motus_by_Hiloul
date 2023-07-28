@@ -1,7 +1,13 @@
 <?php
 session_start();
-$_SESSION['user_id'] = $userId; // the user ID should be fetched from your user login or registration process
-$_SESSION['nb_tentatives'] = 0; // initialize attempts
+$_SESSION['user_id'] = $fetched_user_id_from_database;
+
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(["error" => "Aucun utilisateur connecté."]);
+    exit();
+}
+$userId = $_SESSION['user_id'];
+$_SESSION['nb_tentatives'] = 0;
 
 // Connexion BDD motus
 $host = 'localhost';
@@ -18,6 +24,23 @@ $opt = [
 ];
 $pdo = new PDO($dsn, $user, $pass, $opt);
 
+// Verifier l'existence de l'utilisateur
+$sql = "SELECT username FROM users WHERE id = ?";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([$userId]);
+$result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$result) {
+    // User introuvable dans la database
+    echo json_encode(['error' => 'Utilisateur non trouvé']);
+    exit();
+}
+
+// Stocker le nom d'utilisateur dans la session
+$_SESSION['username'] = $result['username'];
+
+echo json_encode(['success' => 'Connexion réussie !']);
+
 // Liste de mots à deviner
 $wordsToGuess = ['chat', 'chien', 'chinchilla', 'serpent'];
 
@@ -33,7 +56,7 @@ if (!isset($_SESSION['wordToGuess'])) {
 // Le mot proposé par l'utilisateur
 if (!isset($_POST['word'])) {
     header('Content-Type: application/json');
-    echo json_encode(['error' => 'No word provided']);
+    echo json_encode(['error' => 'Aucun mot entré']);
     exit();
 }
 
@@ -88,7 +111,7 @@ if ($isGuessed) {
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$_SESSION['user_id'], $wordToGuess, $attempts, $score]);
 
-        // Réinitialisez le mot à deviner pour la prochaine requête
+        // Réinitialiser le mot à deviner pour la prochaine requête
         unset($_SESSION['wordToGuess']);
 
     } catch (PDOException $e) {

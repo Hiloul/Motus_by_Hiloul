@@ -1,7 +1,8 @@
+// Formulaire principale du jeu
 document.getElementById("wordForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
-  var word = document.getElementById("wordInput").value; // Change "word" to "wordInput"
+  var word = document.getElementById("wordInput").value;
 
   var xhr = new XMLHttpRequest();
   xhr.open("POST", "src/php/motus.php", true);
@@ -12,34 +13,42 @@ document.getElementById("wordForm").addEventListener("submit", function (e) {
     if (this.status == 200) {
       var response;
       try {
-          response = JSON.parse(this.responseText);
-      } catch(e) {
-          console.log('Erreur de parsing JSON: ', e);
-          return;
+        var response = JSON.parse(this.responseText);
+      } catch (e) {
+        console.error("Failed to parse response as JSON: ", this.responseText);
+        return;
       }
       if (response.result) {
-          var wordElement = document.getElementById("wordDisplay");
-          wordElement.innerHTML = '';
-          for (var i = 0; i < response.result.length; i++) {
-              var letterElement = document.createElement('span');
-              letterElement.textContent = response.result[i].letter;
-              letterElement.style.color = response.result[i].color;
-              wordElement.appendChild(letterElement);
-          }
+        var wordElement = document.getElementById("wordDisplay");
+        wordElement.innerHTML = "";
+        for (var i = 0; i < response.result.length; i++) {
+          var letterElement = document.createElement("span");
+          letterElement.textContent = response.result[i].letter;
+          letterElement.style.color = response.result[i].color;
+          wordElement.appendChild(letterElement);
+        }
       }
       if (response.error) {
-          var errorElement = document.getElementById("errorMessage");
-          errorElement.textContent = response.error;
+        var errorElement = document.getElementById("errorMessage");
+        errorElement.textContent = response.error;
       }
       if (response.attempts) {
-          var attemptsElement = document.getElementById("attemptsCounter");
-          attemptsElement.textContent = "Nombre de tentatives : " + response.attempts;
+        var attemptsElement = document.getElementById("attemptsCounter");
+        attemptsElement.textContent =
+          "Nombre de tentatives : " + response.attempts;
       }
     }
   };
+
+  xhr.onerror = function () {
+    var errorElement = document.getElementById("errorMessage");
+    errorElement.textContent =
+      "Une erreur s'est produite lors de l'envoi de la requête.";
+  };
 });
 
-document.getElementById("regenerate").addEventListener("click", function(e) {
+// Bouton changer de mot
+document.getElementById("regenerate").addEventListener("click", function (e) {
   e.preventDefault();
 
   var xhr = new XMLHttpRequest();
@@ -49,9 +58,16 @@ document.getElementById("regenerate").addEventListener("click", function(e) {
 
   xhr.onload = function () {
     if (this.status == 200) {
-      document.getElementById("wordInput").value = ''; // Use value instead of innerHTML for input elements
+      document.getElementById("wordInput").value = "";
       document.getElementById("attemptsCounter").textContent = "0 tentatives";
-      document.getElementById("errorMessage").textContent = "Mot changé avec succes !";
+      document.getElementById("errorMessage").textContent =
+        "Mot changé avec succes !";
     }
+  };
+
+  xhr.onerror = function () {
+    var errorElement = document.getElementById("errorMessage");
+    errorElement.textContent =
+      "Une erreur s'est produite lors de l'envoi de la requête.";
   };
 });
