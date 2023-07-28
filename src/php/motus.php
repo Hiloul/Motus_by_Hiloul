@@ -63,11 +63,13 @@ if (!$isGuessed) {
     $_SESSION['attempts']++;
 }
 
-// Vérifier si le nombre de tentatives a dépassé la limite après incrémentation
+// // Vérifier si le nombre de tentatives a dépassé la limite après incrémentation
 if ($_SESSION['attempts'] >= 6) {
-    $response = ['error' => 'Nombre de tentatives atteintes.', 'attempts' => $_SESSION['attempts']];
+    $response = ['error' => 'Perdu ! Nombre de tentatives atteintes.', 'attempts' => $_SESSION['attempts']];
     header('Content-Type: application/json');
     echo json_encode($response);
+// Réinitialisation du compteur apres les 6 tentatives échouées
+    $_SESSION['attempts'] = 0;
     exit();
 }
 
