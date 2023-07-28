@@ -35,16 +35,16 @@ if (isset($_POST['username'])) {
 }
 
 // Récupérer tous les scores d'un utilisateur
-function getUserScores($pdo, $userId) {
-    $sql = "SELECT score FROM scores WHERE user_id = ? ORDER BY score DESC LIMIT 10"; // top 10
+function getUserBestScores($pdo) {
+    $sql = "SELECT username, score FROM scores JOIN users ON scores.user_id = users.id ORDER BY score DESC LIMIT 10"; // top 10
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$userId]);
+    $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 try {
-    $scores = getUserScores($pdo, $userId);
-    $response = ['scores' => $scores];
+    $scores = getUserBestScores($pdo);
+    $response = ['bestScores' => $scores];
 } catch (PDOException $e) {
     $response = ['error' => 'Une erreur est survenue lors de la récupération des scores.'];
 } finally {
@@ -54,4 +54,3 @@ try {
 
 // Envoi de la réponse en JSON
 echo json_encode($response);
-?>

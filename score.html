@@ -4,14 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mes scores</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.get(
+                "src/php/score.php",
+                function (data) {
+                    if(data.error) {
+                        alert(data.error);
+                    } else {
+                        var scores = data.bestScores;
+                        for (var i = 0; i < scores.length; i++) {
+                            var score = scores[i];
+                            var row = "<tr><td>" + (i + 1) + "</td><td>" + score.score + "</td></tr>";
+                            $("#scoreTable tbody").append(row);
+                        }
+                    }
+                },
+                "json"
+            );
+        });
+    </script>
 </head>
 <body>
-    <h1>Mes scores</h1>
-    <button id="scoreButton">Afficher mes scores</button>
-    <ul id="scoreList" class="score-list">
-        <!-- Les scores seront insérés ici -->
-    </ul>
-    <a href="game.html">Retourner au jeu</a>
-    <script src="src/js/scoreScript.js"></script>    
+    <h1>Mes meilleurs scores</h1>
+    <div class="walloffame">
+        <h3>Tableau des meilleurs scores</h3>
+        <table id="scoreTable">
+            <thead>
+                <tr>
+                    <th>Rang</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Les scores ici -->
+            </tbody>
+        </table>
+    </div>
+    <a href="game.html">Retourner au jeu</a>   
 </body>
 </html>
