@@ -1,6 +1,12 @@
 <?php
 session_start();
+$sql = "SELECT id FROM users WHERE username = ?";
+$stmt = $pdo->prepare($sql);
+$stmt->execute([$_SESSION['username']]);
+$fetched_user_id_from_database = $stmt->fetchColumn();
+
 $_SESSION['user_id'] = $fetched_user_id_from_database;
+
 
 if (!isset($_SESSION['user_id'])) {
     echo json_encode(["error" => "Aucun utilisateur connecté."]);
@@ -98,13 +104,13 @@ if ($isGuessed) {
     try {
         // Vérifier si les variables de session sont définies et valides
         if (!isset($_SESSION['user_id']) || !isset($_SESSION['attempts'])) {
-            throw new Exception("User ID ou Attempts non défini(e) en session.");
+            throw new Exception("User ID or Attempts not set in session.");
         }
 
         // Le score est basé sur le nombre de tentatives
         // Si $attempts vaut 0, évitez une division par zéro en attribuant un score de 0
         $attempts = $_SESSION['attempts'];
-        $score = $attempts ? (1 / $attempts) * 100 : 0;
+        $score = $attempts ? (1 / $attempts) * 100 : 100;  // Score should be 100 if guessed in 1st attempt
 
         // Insérer le score et le mot deviné dans la table games
         $sql = "INSERT INTO games (user_id, word, nb_tentatives, score) VALUES (?, ?, ?, ?)";
@@ -113,13 +119,16 @@ if ($isGuessed) {
 
         // Réinitialiser le mot à deviner pour la prochaine requête
         unset($_SESSION['wordToGuess']);
+        unset($_SESSION['attempts']);  // reset plus tard
 
     } catch (PDOException $e) {
         // Afficher le message d'erreur SQL
-        echo "Erreur : " . $e->getMessage();
+        header('Content-Type: application/json');
+        echo json_encode(["error" => $e->getMessage()]);
     } catch (Exception $e) {
         // Afficher le message d'erreur
-        echo "Erreur : " . $e->getMessage();
+        header('Content-Type: application/json');
+        echo json_encode(["error" => $e->getMessage()]);
     }
 }
 
