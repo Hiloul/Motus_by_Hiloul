@@ -35,5 +35,9 @@ document.getElementById("userForm").addEventListener("submit", function (e) {
       }
     }
   };
+  xhr.onerror = function () {
+    console.error("Request failed.");
+  };
+  
 });
 

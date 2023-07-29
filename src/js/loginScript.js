@@ -8,7 +8,6 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
   xhr.open("POST", "src/php/login.php", true);
   xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   xhr.send("username=" + encodeURIComponent(username));
-
   xhr.onload = function () {
     if (this.status == 200) {
       try {
@@ -36,6 +35,10 @@ document.getElementById("loginForm").addEventListener("submit", function (e) {
       }
     }
   };
+  xhr.onerror = function () {
+    console.error("Request failed.");
+  };
+  
 });
 
 

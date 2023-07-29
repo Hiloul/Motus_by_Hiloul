@@ -1,35 +1,49 @@
-// Lorsque le formulaire est soumis...
 document.getElementById("wordForm").addEventListener("submit", function (e) {
     e.preventDefault();
 
-    // Récupérer le mot proposé
     var proposedWord = document.getElementById("wordInput").value;
 
-    // Créer une requête HTTP
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "src/php/motus.php", true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
-    // Envoyer la requête
-    xhr.send("word=" + encodeURIComponent(proposedWord));
-
-    // Lorsque la requête se termine...
     xhr.onload = function () {
-        if (this.status == 200) {
-            // Parse the response
-            var response = JSON.parse(this.responseText);
+        if (this.status === 200) {
+            var response;
+            try {
+                response = this.responseText ? JSON.parse(this.responseText) : null;
+                if (!response) {
+                    throw new Error("Empty response received from server");
+                }
+            } catch (e) {
+                console.error("Failed to parse response as JSON: ", e);
+                return;
+            }
 
-            // Vérifier si le mot a été deviné
-            if (response.isGuessed) {
-                // Afficher un message de réussite
+            if (response.error) {
+                alert(response.error);
+                return;
+            }
+
+            var isGuessed = response.result.every(function(letter) {
+                return letter.color === 'green';
+            });
+
+            if (isGuessed) {
                 alert("Bravo ! Vous avez deviné le mot.");
+                var score = (100 / response.attempts).toFixed(2);  // Affiche le score avec 2 chiffres après la virgule
+                alert("Votre score est : " + score);
             } else {
-                // Afficher un message d'échec
                 alert("Dommage ! Réessayez.");
             }
         } else {
-            // Gérer les erreurs de la requête
             alert("Une erreur s'est produite lors de la soumission du mot.");
         }
     };
+
+    xhr.onerror = function() {
+        alert("Request failed");
+    };
+
+    xhr.send("word=" + encodeURIComponent(proposedWord));
 });

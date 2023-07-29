@@ -16,11 +16,12 @@ $pdo = new PDO($dsn, $user, $pass, $opt);
 
 // Afficher les 10 meilleurs scores de tous les utilisateurs
 function getBestScores($pdo) {
-    $sql = "SELECT username, score FROM scores JOIN users ON scores.user_id = users.id ORDER BY score DESC LIMIT 10";
+    $sql = "SELECT users.username, games.score FROM games JOIN users ON games.user_id = users.id ORDER BY games.score DESC LIMIT 10";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
 
 try {
     $scores = getBestScores($pdo);

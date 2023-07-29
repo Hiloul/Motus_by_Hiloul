@@ -1,60 +1,76 @@
-// Formulaire principale du jeu
-document.getElementById("wordForm").addEventListener("submit", function (e) {
-  e.preventDefault();
+// Formulaire principal du jeu
+var wordForm = document.getElementById("wordForm");
+var wordInput = document.getElementById("wordInput");
+var wordDisplay = document.getElementById("wordDisplay");
+var errorMessage = document.getElementById("errorMessage");
+var attemptsCounter = document.getElementById("attemptsCounter");
 
-  var word = document.getElementById("wordInput").value;
+if (wordForm) {
+  wordForm.addEventListener("submit", function (e) {
+    e.preventDefault();
 
-  var xhr = new XMLHttpRequest();
-  xhr.open("POST", "src/php/motus.php", true);
-  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  xhr.send("word=" + encodeURIComponent(word));
+    var word = wordInput ? wordInput.value : "";
 
-  xhr.onload = function () {
-    if (this.status == 200) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "src/php/motus.php", true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send("word=" + encodeURIComponent(word));
+
+    xhr.onload = function () {
+      if (this.status == 200) {
+        console.log("Server response: ", this.responseText);  // Log the server response
         var response;
         try {
-            response = JSON.parse(this.responseText);
+          var response = JSON.parse(this.responseText);
         } catch (e) {
-            console.error("Failed to parse response as JSON: ", this.responseText);
-            return;
+          console.error("Failed to parse response as JSON: ", e);  // Log the error
+          console.error("Server response: ", this.responseText);  // Log the server response
+          return;
         }
-        if (response.result) {
-            var wordElement = document.getElementById("wordDisplay");
-            wordElement.innerHTML = "";
-            for (var i = 0; i < response.result.length; i++) {
-                var letterElement = document.createElement("span");
-                letterElement.textContent = response.result[i].letter;
-                letterElement.style.color = response.result[i].color;
-                wordElement.appendChild(letterElement);
-            }
+        if (response.result && wordDisplay) {
+          wordDisplay.innerHTML = "";
+          for (var i = 0; i < response.result.length; i++) {
+            var letterElement = document.createElement("span");
+            letterElement.textContent = response.result[i].letter;
+            letterElement.style.color = response.result[i].color;
+            wordDisplay.appendChild(letterElement);
+          }
         }
-        if (response.error) {
-            var errorElement = document.getElementById("errorMessage");
-            errorElement.textContent = response.error;
+        if (response.error && errorMessage) {
+          errorMessage.textContent = response.error;
         }
-        if (response.attempts) {
-            var attemptsElement = document.getElementById("attemptsCounter");
-            attemptsElement.textContent = "Nombre de tentatives : " + response.attempts;
+        if (response.attempts && attemptsCounter) {
+          attemptsCounter.textContent = "Nombre de tentatives : " + response.attempts;
         }
-    }
-};
-});
+      } else {
+        // Gérer les erreurs de la requête
+        alert("Une erreur s'est produite lors de la soumission du mot.");
+      }
+    };
+  });
+}
 
 // Bouton changer de mot (ok)
-document.getElementById("regenerate").addEventListener("click", function (e) {
-  e.preventDefault();
+var regenerateBtn = document.getElementById("regenerate");
 
-  var xhr = new XMLHttpRequest();
-  xhr.open("POST", "src/php/regenerate.php", true);
-  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-  xhr.send();
+if (regenerateBtn) {
+  regenerateBtn.addEventListener("click", function (e) {
+    e.preventDefault();
 
-  xhr.onload = function () {
-    if (this.status == 200) {
-      document.getElementById("wordInput").value = "";
-      document.getElementById("attemptsCounter").textContent = "0 tentatives";
-      document.getElementById("errorMessage").textContent =
-        "Mot changé avec succes !";
-    }
-  };
-});
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "src/php/regenerate.php", true);
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.send();
+
+    xhr.onload = function () {
+      if (this.status == 200 && wordInput && attemptsCounter && errorMessage) {
+        wordInput.value = "";
+        attemptsCounter.textContent = "0 tentatives";
+        errorMessage.textContent = "Mot changé avec succes !";
+      } else {
+        // Gérer les erreurs de la requête
+        alert("Une erreur s'est produite lors du changement du mot.");
+      }
+    };
+  });
+}
