@@ -7,7 +7,7 @@ header('Content-Type: application/json');
 
 $username = $_POST['username'];
 
-// Connexion BDD motus
+// Connexion BDD motus si il ya des soucis de parsing json suppr * commentaire
 $host = 'localhost';
 $db   = 'motus';
 $user = 'root';
